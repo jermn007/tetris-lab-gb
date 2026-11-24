@@ -20,3 +20,4 @@ choice would otherwise have to be re-derived — or, worse, silently reversed.
 | [13](0013-the-menu-is-a-scrolling-list.md) | The menu is a scrolling list, drawn from Tolstoj's layout |
 | [14](0014-heart-games-have-their-own-high-scores.md) | Heart games have their own high scores, by exchanging tables |
 | [15](0015-high-scores-are-mirrored-to-cartridge-ram.md) | High scores are mirrored to cartridge RAM, a slot at a time |
+| [16](0016-game-statistics-are-counted-by-watching.md) | Game statistics are counted by watching, not by hooking |
