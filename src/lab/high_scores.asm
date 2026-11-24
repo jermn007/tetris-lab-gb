@@ -172,6 +172,54 @@ LabFileHighScore::
 	ret
 
 
+; Make the live A-type table the one for hearts as they are set now.
+;
+; Nothing below has to know there are two tables: the one not in use is parked
+; in wLabOtherHighScores and exchanged with the live one when hearts change.
+; That keeps the original's own filing, name entry and display - which all
+; index wATypeHighScores directly - correct with no hook at all.
+;
+; 690 bytes, a little under a frame. Called where hearts can change and where
+; a game is filed, never during play.
+LabSyncHeartTables::
+	ldh  a, [hIsHardMode]
+	and  a
+	jr   z, .have
+	ld   a, 1
+
+.have:
+	ld   b, a
+	ld   a, [wLabTablesAreHearts]
+	cp   b
+	ret  z
+	ld   a, b
+	ld   [wLabTablesAreHearts], a
+
+	ld   hl, wATypeHighScores
+	ld   de, wLabOtherHighScores
+	ld   bc, HISCORE_SIZEOF * (MAX_LEVEL + 1)
+	call .exchange
+	ld   hl, wLabHiScoreMillions
+	ld   de, wLabOtherMillions
+	ld   bc, (MAX_LEVEL + 1) * 3
+
+.exchange:
+	push bc
+	ld   a, [de]
+	ld   b, a
+	ld   a, [hl]
+	ld   [de], a
+	ld   a, b
+	ld   [hl+], a
+	inc  de
+	pop  bc
+	dec  bc
+	ld   a, b
+	or   c
+	jr   nz, .exchange
+	ret
+
+
 ; The level whose high scores are on screen. The grid cursor is the level while
 ; it has focus; above the grid it is the picker, and hATypeLevel has been parked
 ; on the last grid cell to keep that cursor somewhere valid.
