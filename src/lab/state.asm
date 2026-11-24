@@ -186,7 +186,17 @@ wLabTablesAreHearts:: db
 wLabOtherHighScores:: ds HISCORE_SIZEOF * (MAX_LEVEL + 1)
 wLabOtherMillions::   ds (MAX_LEVEL + 1) * 3
 
-	ds 217
+; Battery save. See save.asm.
+;
+; wLabSaveLoaded is how a cold boot is told from a soft reset: Begin2 clears
+; this range and Reset does not, so it is zero exactly once per power-on.
+wLabSaveLoaded:: db
+wLabNameSaved::  db        ; the entry now being named has been written once
+wLabSaveDir::    db        ; SAVE_PUT / SAVE_GET / SAVE_SKIP
+wLabSaveCount::  db        ; slots left in the table being walked
+wLabSaveMil::    dw        ; that table's seventh digits, high byte first
+
+	ds 211
 wLabStateEnd::
 
 ; The TRANSITION row's top value, shown as F. TetrisGYM has one more, G, which

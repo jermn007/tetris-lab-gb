@@ -19,3 +19,4 @@ choice would otherwise have to be re-derived — or, worse, silently reversed.
 | [12](0012-trep-designs-the-screens.md) | TREP designs the screens, and Lab layouts live in bank 2 |
 | [13](0013-the-menu-is-a-scrolling-list.md) | The menu is a scrolling list, drawn from Tolstoj's layout |
 | [14](0014-heart-games-have-their-own-high-scores.md) | Heart games have their own high scores, by exchanging tables |
+| [15](0015-high-scores-are-mirrored-to-cartridge-ram.md) | High scores are mirrored to cartridge RAM, a slot at a time |

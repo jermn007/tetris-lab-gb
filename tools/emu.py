@@ -13,6 +13,7 @@ Requires PyBoy, a test-only dependency:
 still build the ROM.
 """
 
+import io
 import os
 import sys
 from pathlib import Path
@@ -52,6 +53,10 @@ hGameState = 0xFFE1
 rNR52 = 0xFF26                               # sound on/off + per-channel flags
 hIsHardMode = 0xFFF4
 
+# 8 KB that has never been written. Real chips power up holding anything; $FF
+# is the commonest, and the save code is tested against the others.
+BLANK_RAM = bytes([0xFF]) * 0x2000
+
 BOOT_TIMEOUT = 2000     # frames; the copyright screens alone are ~500
 
 
@@ -72,14 +77,20 @@ def sym(name, rom="build/tetrislab.sym"):
 class Tetris:
     """A running Game Boy Tetris, driven a frame at a time."""
 
-    def __init__(self, rom="build/tetris.gb", sound=False):
+    def __init__(self, rom="build/tetris.gb", sound=False, ram=None):
         path = ROOT / rom if not os.path.isabs(rom) else Path(rom)
         if not path.exists():
             raise SystemExit(f"{path} not found - run `python3 build.py` first")
         # Sound is off by default: it is slow and most tests do not care. Turn it
         # on to assert that music is actually playing - rNR52's channel flags are
         # all zero without it.
-        self.pb = PyBoy(str(path), window="null", sound_emulated=sound, log_level="ERROR")
+        #
+        # `ram` is the cartridge's battery RAM as bytes - what power_off() returned
+        # last time - or None for a cartridge that has never been written. It is
+        # always passed in memory: PyBoy would otherwise look for a .ram file
+        # beside the ROM, and one test's save would become the next one's.
+        self.pb = PyBoy(str(path), window="null", sound_emulated=sound, log_level="ERROR",
+                        ram_file=io.BytesIO(ram if ram is not None else BLANK_RAM))
         # The Lab replaces the title screen, so hearts move from the original's
         # hidden Down+Start there to Select on the level select.
         self.is_lab = "tetrislab" in path.name
@@ -224,7 +235,17 @@ class Tetris:
         return gaps
 
     def close(self):
-        self.pb.stop(save=False)
+        if self.pb is not None:
+            self.pb.stop(save=False)
+            self.pb = None
+
+    def power_off(self):
+        """Switch off, and return the battery RAM as the cartridge keeps it.
+        Hand it to the next Tetris(ram=...) to switch back on."""
+        out = io.BytesIO()
+        self.pb.stop(save=True, ram_file=out)
+        self.pb = None
+        return out.getvalue()
 
     def __enter__(self):
         return self

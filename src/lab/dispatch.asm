@@ -47,7 +47,7 @@ LabDispatch::
 	cp   GS_ENTERING_HIGH_SCORE
 	jr   z, .nameEntry
 	cp   GS_IN_GAME_INIT
-	jr   z, .gameInit
+	jp   z, .gameInit
 	cp   GS_A_TYPE_SELECTION_INIT
 	jr   z, .init
 	cp   GS_B_TYPE_SELECTION_INIT
@@ -63,7 +63,7 @@ LabDispatch::
 	cp   GS_IN_GAME_MAIN
 	jp   z, .inGameMain
 	cp   GS_COPYRIGHT_DISPLAY
-	jr   z, .skipCopyright
+	jp   z, .skipCopyright
 	cp   GS_PRE_ROCKET_SCENE_WAIT
 	jr   z, .skipRocket
 
@@ -120,11 +120,23 @@ LabDispatch::
 	call LabResetComboHeld
 	jr   nz, .runNameEntry
 
+	xor  a
+	ld   [wLabNameSaved], a
 	call LabInGameReset
 	ld   hl, Stub_148c
 	ret
 
 .runNameEntry:
+; The entry is already in the table, under dots. Write it to the cartridge now
+; rather than when the name is finished: this is a screen people switch off on.
+	ld   a, [wLabNameSaved]
+	and  a
+	jr   nz, .nameEntrySaved
+	inc  a
+	ld   [wLabNameSaved], a
+	call LabSaveAll
+
+.nameEntrySaved:
 ; The name is typed on the screen the game was played on, and B-type has its
 ; own - a different layout, which the Lab does not draw on at all. Its cells
 ; are where ours are: the level picker's is inside B-type's difficulty grid,
@@ -138,8 +150,21 @@ LabDispatch::
 	call LabPaintPickerSteady       ; and so is the level it was played at
 	call LabPaintModeLabel          ; and which mode played it
 
+; Run the original's handler ourselves rather than handing it back, so we are
+; still here when it finishes: the name is complete on the frame it moves the
+; state on, and that is when it is written. It calls nothing in bank 1.
 .runNameEntryPlain:
-	ld   hl, GameState15_EnteringHighScore
+	call GameState15_EnteringHighScore
+	ldh  a, [hGameState]
+	cp   GS_ENTERING_HIGH_SCORE
+	jr   z, .stillTyping
+
+	xor  a
+	ld   [wLabNameSaved], a
+	call LabSaveAll
+
+.stillTyping:
+	ld   hl, Stub_148c
 	ret
 
 ; Every game begins here, whether from the menu or an instant restart, so this
@@ -163,6 +188,7 @@ LabDispatch::
 ; table into it at $068C. The Lab menu never runs a demo, so none of it is
 ; needed. The tile data comes from $06 either way.
 .skipCopyright:
+	call LabSaveBoot                ; the first state of every boot
 	ld   a, GS_TITLE_SCREEN_INIT
 	ldh  [hGameState], a
 	ld   hl, Stub_148c

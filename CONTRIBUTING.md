@@ -90,6 +90,7 @@ python3 -m venv .venv
 .venv/bin/python tests/test_obstacle.py
 .venv/bin/python tests/test_quit.py
 .venv/bin/python tests/test_hearts.py
+.venv/bin/python tests/test_save.py
 ```
 
 ### Editing the graphics
