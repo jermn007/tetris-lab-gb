@@ -136,6 +136,16 @@ LabDispatch::
 	ld   [wLabNameSaved], a
 	call LabSaveAll
 
+; And once, what the level select's first frame would have drawn had the game
+; not placed. The original's init painted the panel for hATypeLevel, which is
+; clamped into the grid by now - an A-M game was typing into level 9's table -
+; and nothing but that first frame draws the heart.
+	ldh  a, [hGameType]
+	cp   GAME_TYPE_B_TYPE
+	jr   z, .runNameEntryPlain
+	call LabDrawHearts
+	call LabUpdateHighScores
+
 .nameEntrySaved:
 ; The name is typed on the screen the game was played on, and B-type has its
 ; own - a different layout, which the Lab does not draw on at all. Its cells

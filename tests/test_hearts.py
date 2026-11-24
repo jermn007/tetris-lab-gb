@@ -192,6 +192,26 @@ def test_hearts_forced_off_at_l_shows_the_plain_table():
         assert shown(t) == 777000, f"and the panel does not show it: {shown(t)}"
 
 
+def test_the_heart_is_on_screen_while_the_name_is_typed():
+    """Reported from an EverDrive. The heart is drawn by the level select's own
+    first frame, and a game that places goes to the name entry instead - so the
+    one screen that files a heart score did not say it was one."""
+    HEART_CELL = 0x9800 + 4 * 32 + 14
+    TILE_HEART = 0x27
+    for hearts in (True, False):
+        with Tetris(ROM) as t:
+            t.start_game_at(LEVEL, hearts=hearts)
+            t.tick(120)
+            for j, byte in enumerate(bcd(123400)):
+                t.pb.memory[wScoreBCD + j] = byte
+            t.pb.memory[hGameState] = GS_A_TYPE_SELECTION_INIT
+            t.tick(120)
+            assert t.state == GS_ENTERING_HIGH_SCORE, f"${t.state:02X}"
+            assert (t[HEART_CELL] == TILE_HEART) == hearts, (
+                f"hearts {hearts}: the cell holds ${t[HEART_CELL]:02X}"
+            )
+
+
 TESTS = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
 
 if __name__ == "__main__":

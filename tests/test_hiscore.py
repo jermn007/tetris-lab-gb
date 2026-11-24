@@ -264,6 +264,38 @@ def test_the_level_you_played_is_on_screen_while_you_type_your_name():
         assert not t[SPRITE_HIDDEN], "the grid cursor was hidden for a grid level"
 
 
+def test_the_scores_you_are_joining_are_on_screen_while_you_type_your_name():
+    """Reported from an EverDrive: on a letter level the table was empty while
+    the name was typed, and filled in once it was entered.
+
+    The original's init draws the panel for hATypeLevel, and that has been
+    clamped into the grid by then - so an A-M game typed its name into level
+    9's table. Same cause as the picker above; this is the panel's half of it.
+    """
+    LEVEL_C = 12
+    t = Tetris(ROM)
+    t.start_game_at(LEVEL_C)
+    t.tick(60)
+    for j, byte in enumerate(bcd(4321)):         # an older score, there already
+        t.pb.memory[slot(LEVEL_C) + j] = byte
+    for j, byte in enumerate(bcd(777000)):       # and one on level 9, which is not ours
+        t.pb.memory[slot(9) + j] = byte
+    for j, byte in enumerate(bcd(5000)):
+        t.pb.memory[wScoreBCD + j] = byte
+    t.pb.memory[0xFFE1] = GS_A_TYPE_SELECTION_INIT
+    t.run_until(lambda: t.state == 0x15, what="the name entry")
+    t.tick(30)
+
+    def score_on_row(row):
+        cells = [t[ROW_VRAM + row * 32 + 8 + i] for i in range(6)]
+        digits = "".join(str(c) for c in cells if c <= 9)
+        return int(digits) if digits else 0
+
+    with t:
+        assert score_on_row(0) == 5000, f"the new score: {score_on_row(0)}"
+        assert score_on_row(1) == 4321, f"the one it joins: {score_on_row(1)}"
+
+
 def test_b_type_name_entry_is_left_alone():
     """Reported by Giovanni after winning a B-type game: the level picker was
     drawn into B-type's difficulty grid while he typed his name, and stayed.
