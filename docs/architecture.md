@@ -50,6 +50,7 @@ tetris-lab-gb/
 │       ├── high_scores.asm    filing and drawing, seventh digit included
 │       ├── save.asm           the battery save: high scores, mirrored
 │       ├── stats.asm          one game's record, counted from the frame hook
+│       ├── stats_screen.asm   the page that record is shown on after a game
 │       ├── menu.asm           the title screen, replaced
 │       ├── drills.asm         trainers: TRANSITION so far
 │       ├── gameplay.asm       corrections to how the game plays

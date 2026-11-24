@@ -42,4 +42,4 @@ records are saved.
 * **A game is finished only if it reached the game over screen.** Instant
   restart and B-while-paused leave `STATSB_DONE` clear.
 * **Tetris rate is not stored.** It is the four counts, divided when drawn.
-* Not done here: any screen, and saving. Nothing a player can see yet.
+* Not done here: saving. The screen is ADR 0017.

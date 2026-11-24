@@ -220,6 +220,7 @@ wLabStatsDroughtNow:: dw
 wLabStatsWasState::   db        ; hPieceFallingState as it was last frame
 wLabStatsAwaitSpawn:: db        ; a piece has locked and the next is not out
 wLabStatsLevelSeen::  db
+wLabStatsShown::      db        ; the stats screen has been opened
 wLabStatsEnd::
 
 	ds 211 - (wLabStatsEnd - wLabStats)

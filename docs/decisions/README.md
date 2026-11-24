@@ -21,3 +21,4 @@ choice would otherwise have to be re-derived — or, worse, silently reversed.
 | [14](0014-heart-games-have-their-own-high-scores.md) | Heart games have their own high scores, by exchanging tables |
 | [15](0015-high-scores-are-mirrored-to-cartridge-ram.md) | High scores are mirrored to cartridge RAM, a slot at a time |
 | [16](0016-game-statistics-are-counted-by-watching.md) | Game statistics are counted by watching, not by hooking |
+| [17](0017-the-stats-screen-sits-inside-the-game-over-state.md) | The stats screen sits inside the game over state |
