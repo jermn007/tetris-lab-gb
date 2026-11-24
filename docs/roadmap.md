@@ -7,8 +7,8 @@ current.
 | Milestone | State |
 | --- | --- |
 | 0 — Reproduce the original ROM | **done** |
-| 0.5 — Cartridge expansion (MBC1, 64 KB, SRAM) | **done** — the cartridge has SRAM; nothing writes to it yet |
-| 1 — Level picker, hearts, instant restart | **done** — except SRAM persistence, see below |
+| 0.5 — Cartridge expansion (MBC1, 64 KB, SRAM) | **done** — the cartridge has SRAM; high scores are saved to it |
+| 1 — Level picker, hearts, instant restart | **done** — except persisted settings, see below |
 | 2 — Core training features | **in progress** — SPS done; transition trainer next |
 | 3 — Board control and information | not started |
 | 4 — Replay, tooling and polish | not started |
@@ -25,10 +25,10 @@ from `v0.3.0` or earlier deals a different sequence.
 
 Outstanding across finished milestones:
 
-* **SRAM persistence is not implemented.** The cartridge declares 8 KB of
-  battery RAM (M0.5) but no code writes to it, so settings and high scores live
-  in WRAM: they survive the soft reset, not a power cycle. M1 work item 4 was
-  never done, and the milestone was marked complete without it.
+* **SRAM persistence covers high scores only** (2026-11-24, `docs/decisions/0015`).
+  Every A-type and B-type table survives a power cycle, in an emulator. Settings
+  - last level, hearts, music, seed - still live in WRAM and do not: that is the
+  rest of M1 work item 4.
 * Booting on a real DMG/GBC via a flash cart — needs hardware nobody has yet.
 
 Milestones are ordered by *risk retired per unit of effort*. Each has
@@ -186,7 +186,7 @@ with an indicator, instant restart from a game and everything downstream of it,
 and a headless emulator harness. Verified in an emulator and by hand.
 
 **Added 2026-11-24:** heart games file into their own A-type high score table
-(`docs/decisions/0014`). Session-only, like every score, until SRAM persistence lands.
+(`docs/decisions/0014`), and every table is saved to the cartridge (`docs/decisions/0015`).
 
 ---
 

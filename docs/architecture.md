@@ -48,6 +48,7 @@ tetris-lab-gb/
 │       ├── level_select.asm   the 0-9 grid plus the A-M level field
 │       ├── seed.asm           the six seed digits, and arming the LFSR
 │       ├── high_scores.asm    filing and drawing, seventh digit included
+│       ├── save.asm           the battery save: high scores, mirrored
 │       ├── menu.asm           the title screen, replaced
 │       ├── drills.asm         trainers: TRANSITION so far
 │       ├── gameplay.asm       corrections to how the game plays
@@ -235,12 +236,16 @@ Two caveats to handle explicitly:
 
 ### 4.3 SRAM (`$A000–$BFFF`, 8 KB)
 
+**As built, 2026-11-24** (`docs/decisions/0015`, `src/lab/save.asm`):
+
 | Range | Contents |
 | --- | --- |
-| `$A000–$A00F` | Magic + version + checksum. **Refuse to load mismatched saves; re-initialise instead.** |
-| `$A010–$A0FF` | Persistent Lab config (last trainer, level, heart flag, DAS values, seed) |
-| `$A100–$A7FF` | Savestate slots (a 10×18 board snapshot is 180 B, so ~8 slots with metadata is comfortable) |
-| `$A800–$BFFF` | Reserved |
+| `$A000–$A004` | Magic + version. **A mismatched save is not read; a new one is started.** |
+| `$A005–$A03F` | Reserved: persistent Lab config (last level, heart flag, music, name) |
+| `$A040–$A308` | A-type high scores, plain — 23 slots, each with its own checksum |
+| `$A340–$A608` | A-type high scores, hearts |
+| `$A640–$ACCF` | B-type high scores — 60 slots |
+| `$AD00–$BFFF` | Free. Savestates were planned at ~180 B a slot; there is room for them here |
 
 SRAM must be enabled (`$0000 = $0A`) before access and disabled after. Never leave it enabled across
 a frame boundary — an unexpected reset with SRAM enabled is the classic save-corruption path.

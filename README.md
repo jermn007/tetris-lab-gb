@@ -147,6 +147,12 @@ Heart games keep **their own high scores**. The `TOP SCORE` panel shows the tabl
 they are set, so `Select` changes both at once - a heart game at level 9 is not competing with a
 plain one.
 
+High scores are **saved to the cartridge**. Every table - A-type plain and hearts, and B-type -
+comes back after a power cycle, on anything that honours an MBC1 battery save: emulators, flash
+carts, FPGA consoles. Nothing to set up: the first boot starts the save, and one that is damaged or
+from another version is started again rather than trusted. A score is written the moment its name
+entry appears, so switching off there loses the name, not the score.
+
 The score no longer stops at 999,999 — it runs to **99,999,999**, which is Toni's format. The
 original pins it at six digits because three BCD bytes hold six; the seventh and eighth are kept
 alongside in a byte that always had room for both. The seventh is drawn into the spare cell right
