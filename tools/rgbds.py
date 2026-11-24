@@ -32,9 +32,17 @@ RELEASES = {
         f"rgbds-{VERSION}-macos-x86-64.zip",
         "65929a5483c89b20955df0d78ceb87744d8ad0cf7c80919f6ee9ef90fc55c08d",
     ),
+    # pinned 2026-11-24; the archive also carries the two DLLs the tools load
+    "Windows": (
+        f"https://github.com/gbdev/rgbds/releases/download/v{VERSION}/"
+        f"rgbds-{VERSION}-win64.zip",
+        "3cae18202a0672152063e49b935ddb9d754f7c2146447bab8aec875be7b866cf",
+    ),
 }
 
-TOOLS = ("rgbasm", "rgblink", "rgbfix", "rgbgfx")
+# Callers pass the bare name: on Windows, CreateProcess appends ".exe" itself.
+EXE = ".exe" if platform.system() == "Windows" else ""
+TOOLS = tuple(t + EXE for t in ("rgbasm", "rgblink", "rgbfix", "rgbgfx"))
 
 
 def _system_toolchain():
