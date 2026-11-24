@@ -15,6 +15,10 @@ LabLevelSelectInit::
 ; Ours rather than the original's, because a seventh digit changes the ranking.
 ; It leaves wScoreBCD zeroed either way, so the original's own call a moment
 ; later finds nothing and cannot file the same game twice.
+;
+; Into the table for the hearts it was played with. They cannot have changed
+; since the game started, but a soft reset clears them and leaves the tables.
+	call LabSyncHeartTables
 	call LabFileHighScore
 
 ; hATypeLevel may hold a level above the grid, set last time a game started.
@@ -85,6 +89,10 @@ LabLevelSelectMain::
 .storeHearts:
 	ldh  [hIsHardMode], a
 	call LabDrawHearts
+	push bc
+	call LabSyncHeartTables         ; heart games have their own table
+	call LabUpdateHighScores
+	pop  bc
 
 .afterSelect:
 	ld   a, [wLabFocus]
@@ -181,6 +189,8 @@ LabLevelSelectPost::
 	xor  a
 	ldh  [hIsHardMode], a
 	call LabDrawHearts
+	call LabSyncHeartTables         ; and the table goes with them
+	call LabUpdateHighScores
 
 .blink:
 	ld   hl, wLabBlinkTimer

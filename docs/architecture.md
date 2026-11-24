@@ -197,7 +197,7 @@ that table rather than defended against — see `docs/decisions/0006`.
 | Range | Size | Assigned to |
 | --- | --- | --- |
 | `$D762–$D8C0` | 351 B | **A-type high scores, levels A–M** — 13 slots continuing `wATypeHighScores` |
-| `$D8C1–$DCC0` | 1 024 B | **Lab core state** — active trainer, config, timer, statistics, HUD dirty flags |
+| `$D8C1–$DCC0` | 1 024 B | **Lab core state** — active trainer, config, timer, statistics, HUD dirty flags, and the A-type high score table not in use (ADR 0014) |
 | `$DCC1–$DF6F` | 687 B | free |
 
 Smaller unlabelled gaps exist lower in WRAM (`$C0DF–$C1FF`, and upstream notes that

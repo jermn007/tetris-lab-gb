@@ -143,6 +143,10 @@ indicator beside `LEVEL`. They add ten levels of speed, and are withheld above l
 the original computes them as `min(level + 10, 20)`, which past 20 clamps *downward* and would
 make the game slower.
 
+Heart games keep **their own high scores**. The `TOP SCORE` panel shows the table for hearts as
+they are set, so `Select` changes both at once - a heart game at level 9 is not competing with a
+plain one.
+
 The score no longer stops at 999,999 — it runs to **99,999,999**, which is Toni's format. The
 original pins it at six digits because three BCD bytes hold six; the seventh and eighth are kept
 alongside in a byte that always had room for both. The seventh is drawn into the spare cell right

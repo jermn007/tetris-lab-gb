@@ -185,6 +185,9 @@ is the difference between one attempt and twenty.
 with an indicator, instant restart from a game and everything downstream of it,
 and a headless emulator harness. Verified in an emulator and by hand.
 
+**Added 2026-11-24:** heart games file into their own A-type high score table
+(`docs/decisions/0014`). Session-only, like every score, until SRAM persistence lands.
+
 ---
 
 ## Milestone 2 — Core training features

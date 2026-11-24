@@ -174,7 +174,19 @@ wLabScoreZeroMoved:: db
 ; them. See LabFileHighScore.
 wLabHiScoreMillions:: ds (MAX_LEVEL + 1) * 3
 
-	ds 908
+; Heart games keep their own A-type table. Every routine that files or draws a
+; high score - the original's and ours - works from wATypeHighScores and
+; wLabHiScoreMillions, so those always hold the table for hearts as they are
+; set now, and the other table waits here. Changing hearts exchanges the two.
+; See LabSyncHeartTables and docs/decisions/0014.
+;
+; wLabTablesAreHearts says which table is the live one, because hIsHardMode
+; cannot: it is HRAM, and the soft reset leaves these tables where they are.
+wLabTablesAreHearts:: db
+wLabOtherHighScores:: ds HISCORE_SIZEOF * (MAX_LEVEL + 1)
+wLabOtherMillions::   ds (MAX_LEVEL + 1) * 3
+
+	ds 217
 wLabStateEnd::
 
 ; The TRANSITION row's top value, shown as F. TetrisGYM has one more, G, which
