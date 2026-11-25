@@ -35,6 +35,8 @@ Outstanding across finished milestones:
   high score keeps its game's record on the cartridge, read back from the
   menu's RECORDS row. Lifetime totals have 172 bytes kept for them and nothing
   written. Checked in an emulator only.
+* **Trainers file no high score** (2026-11-24): a game from TRANSITION, CRUNCH or
+  OBSTACLE goes straight back to the level select. `LabFileHighScore`.
 * Booting on a real DMG/GBC via a flash cart — needs hardware nobody has yet.
 
 Milestones are ordered by *risk retired per unit of effort*. Each has

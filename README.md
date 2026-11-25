@@ -176,6 +176,9 @@ doubles, triples and tetrises; **tetris rate**, the share of lines cleared four 
 **longest drought**, in pieces dealt without an I. A level the game never reached has no row.
 B-type and the trainers have no page.
 
+**A trainer's game is not filed.** TRANSITION, CRUNCH and OBSTACLE start from a state nobody
+played their way to, so they ask for no name and leave the tables alone.
+
 Every A-type high score **keeps its game's record** on the cartridge. The menu's **RECORDS**
 row opens the same page for the last game played and for each of the three places at every
 level, hearts and plain. A score set on a seed keeps its place and no record.

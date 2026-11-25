@@ -163,7 +163,6 @@ LabDispatch::
 
 	call LabRedrawHiScoreMillions   ; the score is on screen while the name is typed
 	call LabPaintPickerSteady       ; and so is the level it was played at
-	call LabPaintModeLabel          ; and which mode played it
 
 ; Run the original's handler ourselves rather than handing it back, so we are
 ; still here when it finishes: the name is complete on the frame it moves the

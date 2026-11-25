@@ -182,15 +182,13 @@ def test_the_millions_do_not_survive_a_change_of_level():
         )
 
 
-def test_the_mode_you_played_is_on_screen_while_you_type_your_name():
-    """The name is typed on the level select's screen, so it inherits that
-    screen's header - and the header is painted by the level select's own
-    states, which $15 is not one of. A crunch run recorded itself under
-    A-TYPE."""
+def test_a_trainer_is_asked_for_no_name_and_files_nothing():
+    """A trainer starts from a state nobody played their way to, so its score
+    is not one. The same game from the TETRIS row is filed."""
     from tools.emu import GS_IN_GAME_MAIN, GS_A_TYPE_SELECTION_MAIN
-    MODE_TETRIS, MODE_CRUNCH = 0, 3
+    MODE_TETRIS = 0
 
-    def header(row):
+    def after(row):
         with Tetris(ROM) as t:
             t.to_mode(row)
             t.press("start")
@@ -208,21 +206,15 @@ def test_the_mode_you_played_is_on_screen_while_you_type_your_name():
             if row == MODE_TETRIS:              # which has a stats screen first
                 t.tick(10)
                 t.press("start")
-            t.run_until(lambda: t.state == 0x15, what="the name entry")
+            t.run_until(lambda: t.state in (0x15, GS_A_TYPE_SELECTION_MAIN),
+                        what="the name entry or the level select")
+            state = t.state
             t.tick(30)
-            out = ""
-            for c in range(2, 14):
-                v = t[0x9800 + 1 * 32 + c]
-                if 0x0A <= v <= 0x23:
-                    out += chr(ord("A") + v - 0x0A)
-                elif v == 0x25:
-                    out += "-"
-                else:
-                    break
-            return out
+            return state, entries(t, LEVEL)[0]
 
-    assert header(MODE_TETRIS) == "A-TYPE", header(MODE_TETRIS)
-    assert header(MODE_CRUNCH) == "CRUNCH", header(MODE_CRUNCH)
+    assert after(MODE_TETRIS) == (0x15, 5000), after(MODE_TETRIS)
+    for row, name in ((2, "TRANSITION"), (3, "CRUNCH"), (4, "OBSTACLE")):
+        assert after(row) == (GS_A_TYPE_SELECTION_MAIN, 0), f"{name}: {after(row)}"
 
 
 def test_the_level_you_played_is_on_screen_while_you_type_your_name():
@@ -365,10 +357,9 @@ def test_a_trainer_gets_the_uncap_without_asking_for_it():
     inherits it by launching as an A-type game and does nothing else.
 
     The carry hooks AddScoreValueDEontoBaseScoreHL, which every score add goes
-    through, and keys on the address wScoreBCD+2 rather than the game type. The
-    display and the filing gate on hGameType, which trainers set to A-type. If a
-    future trainer ever has to register itself with the uncap, this test is
-    where that shows up.
+    through, and keys on the address wScoreBCD+2 rather than the game type. If
+    a future trainer ever has to register itself with the uncap, this test is
+    where that shows up. On the panel only: a trainer's score is not filed.
     """
     sys.path.insert(0, str(ROOT / "tests"))
     from test_labmenu import to_menu_row
@@ -392,18 +383,10 @@ def test_a_trainer_gets_the_uncap_without_asking_for_it():
             panel = [t[0x9800 + 3 * 32 + c] for c in range(13, 20)]
             t.pb.memory[0xFFE1] = GS_A_TYPE_SELECTION_INIT
             t.tick(120)
-            results[name] = (panel, entries(t, level)[0],
-                             [t[ROW_VRAM + SEVENTH + i] for i in range(7)])
+            results[name] = (panel, entries(t, level)[0])
 
-    assert results["TRANSITION"] == results["TETRIS"], (
-        f"the trainer differs from a plain game:\n"
-        f"  TETRIS     {results['TETRIS']}\n"
-        f"  TRANSITION {results['TRANSITION']}"
-    )
-    panel, filed, shown = results["TRANSITION"]
-    assert panel == [1, 0, 0, 0, 2, 5, 7], panel
-    assert filed == 1000257, filed
-    assert shown == [1, 0, 0, 0, 2, 5, 7], shown
+    assert results["TETRIS"] == ([1, 0, 0, 0, 2, 5, 7], 1000257), results["TETRIS"]
+    assert results["TRANSITION"] == ([1, 0, 0, 0, 2, 5, 7], 0), results["TRANSITION"]
 
 
 TESTS = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
