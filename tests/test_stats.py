@@ -5,8 +5,8 @@
 
 The Lab keeps a record of every TETRIS game as it is played: the score and
 lines on reaching level 10 and level 20, how the lines were cleared, and the
-longest run of pieces with no I (ADR 0016). Nothing is drawn yet, so these
-assert on the record.
+longest run of pieces with no I (ADR 0016). These assert on the record;
+tests/test_stats_screen.py reads the page it is shown on.
 
 The games here are real ones. Rows are completed by writing the playfield and
 letting a piece lock on top - the original checks every row on every lock - and

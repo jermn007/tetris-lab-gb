@@ -102,7 +102,11 @@ LabDispatch::
 	ld   hl, Stub_148c
 	ret
 
+; A record to show first, if this game kept one.
 .runLevelEnded:
+	call LabStatsScreen
+	ld   hl, Stub_148c
+	ret  nz
 	ld   hl, GameState04_LevelEndedMain
 	ret
 

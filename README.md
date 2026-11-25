@@ -104,6 +104,7 @@ Game Boy Color*** or the screen is greyscale — see [below](#known-quirk-greysc
 | Level select | `Select` | toggle hearts |
 | Any time in a game | `A`+`B`+`Select`+`Start` | restart the same drill |
 | Paused | `B` | back to the level select |
+| Game over | `Start` or `A` | the game's stats, then again to carry on |
 
 ## Trainers
 
@@ -164,6 +165,13 @@ cell along is inside the playfield.
 High score entries carry both digits too, in the dotted gap the original leaves between the name
 and the score, and they are ranked by them — otherwise a 1 000 050 stored as its low six digits
 would lose to a 999 999.
+
+Every game ends on a **stats page**. From the game over screen, `A` or `Start` shows it and a
+second press carries on as before - to the name entry if the score placed. It has the score and
+lines at the end, and at the moment the game reached **level 10** and **level 20**; singles,
+doubles, triples and tetrises; **tetris rate**, the share of lines cleared four at a time; and the
+**longest drought**, in pieces dealt without an I. A level the game never reached has no row.
+B-type and the trainers have no page.
 
 The rocket scene never plays. The original spends 2.4 seconds waiting and twenty-odd more on a
 launch, at exactly the scores a good session produces; topping out now returns you to the game over

@@ -92,6 +92,7 @@ python3 -m venv .venv
 .venv/bin/python tests/test_hearts.py
 .venv/bin/python tests/test_save.py
 .venv/bin/python tests/test_stats.py
+.venv/bin/python tests/test_stats_screen.py
 ```
 
 ### Editing the graphics

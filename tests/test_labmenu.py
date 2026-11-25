@@ -598,6 +598,9 @@ def test_the_bright_alphabet_lands_where_no_screen_draws():
         t.run_until(lambda: t.state == 0x04, what="the game over screen")
         t.tick(40)
         collect(t)
+        t.press("start")                            # the stats screen
+        t.tick(10)
+        collect(t)
         t.press("start")
         t.run_until(lambda: t.state in (0x11, 0x15), what="what follows it")
         t.tick(30)
