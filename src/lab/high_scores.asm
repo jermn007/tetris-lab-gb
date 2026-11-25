@@ -59,6 +59,13 @@ LabUpdateHighScores::
 ; ---------------------------------------------------------------------------
 
 LabFileHighScore::
+; A trainer's game is not a score. It starts from a state nobody played their
+; way to - TRANSITION hands out up to 1 500 000 - and would sit on the table
+; above every game that was.
+	ld   a, [wLabMode]
+	and  a                          ; MODE_TETRIS
+	jr   nz, .notFiled
+
 	ldh  a, [hATypeLevel]
 	call LabHiScoreSlot
 	ld   a, d
@@ -82,6 +89,7 @@ LabFileHighScore::
 
 ; Did not place. Leave the original's own call nothing to disagree with.
 	pop  hl
+.notFiled:
 	xor  a
 	ld   [wScoreBCD], a
 	ld   [wScoreBCD + 1], a
