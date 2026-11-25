@@ -51,6 +51,7 @@ tetris-lab-gb/
 │       ├── save.asm           the battery save: high scores, mirrored
 │       ├── stats.asm          one game's record, counted from the frame hook
 │       ├── stats_screen.asm   the page that record is shown on after a game
+│       ├── records.asm        records kept with their scores, and the RECORDS screen
 │       ├── menu.asm           the title screen, replaced
 │       ├── drills.asm         trainers: TRANSITION so far
 │       ├── gameplay.asm       corrections to how the game plays
@@ -243,11 +244,13 @@ Two caveats to handle explicitly:
 | Range | Contents |
 | --- | --- |
 | `$A000–$A004` | Magic + version. **A mismatched save is not read; a new one is started.** |
-| `$A005–$A03F` | Reserved: persistent Lab config (last level, heart flag, music, name) |
+| `$A005` | Records version (`docs/decisions/0018`) |
+| `$A006–$A03F` | Reserved: persistent Lab config (last level, heart flag, music, name) |
 | `$A040–$A308` | A-type high scores, plain — 23 slots, each with its own checksum |
 | `$A340–$A608` | A-type high scores, hearts |
 | `$A640–$ACCF` | B-type high scores — 60 slots |
-| `$AD00–$BFFF` | Free. Savestates were planned at ~180 B a slot; there is room for them here |
+| `$AD00–$BF53` | Game records — one per A-type entry, 138 slots of 34 B, each with its own checksum |
+| `$BF54–$BFFF` | Free: 172 B, kept for lifetime totals |
 
 SRAM must be enabled (`$0000 = $0A`) before access and disabled after. Never leave it enabled across
 a frame boundary — an unexpected reset with SRAM enabled is the classic save-corruption path.

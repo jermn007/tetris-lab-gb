@@ -281,6 +281,8 @@ LabDispatch::
 ; runs it, the pair the original used for A-TYPE/B-TYPE. B on a level select
 ; comes back to $08, which is where it came from.
 .menuInit:
+	xor  a
+	ld   [wLabRecordsOpen], a       ; WRAM, so a soft reset would leave it up
 	ld   a, SEED_IDLE
 	ld   [wLabSeedDigit], a
 	call LabMenuDraw
@@ -293,7 +295,15 @@ LabDispatch::
 	ret
 
 .menu:
+	ld   a, [wLabRecordsOpen]
+	and  a
+	jr   nz, .records
 	call LabMenu
+	ld   hl, Stub_148c
+	ret
+
+.records:
+	call LabRecords
 	ld   hl, Stub_148c
 	ret
 

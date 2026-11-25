@@ -32,11 +32,11 @@ MUSIC_A, MUSIC_OFF = 0x1C, 0x1F
 MODE_TETRIS, MODE_BTYPE, MODE_TRANSITION = 0, 1, 2
 MODE_CRUNCH, MODE_OBSTACLE = 3, 4
 
-MODE_SEED, MODE_MUSIC = 5, 6
+MODE_SEED, MODE_MUSIC, MODE_RECORDS = 5, 6, 7
 # Which map row each mode's entry is drawn on, from Tolstoj's layout.
 MENU_MAP_ROWS = {MODE_MUSIC: 8, MODE_TETRIS: 14, MODE_BTYPE: 15,
                  MODE_SEED: 19, MODE_TRANSITION: 24, MODE_CRUNCH: 25,
-                 MODE_OBSTACLE: 26}
+                 MODE_OBSTACLE: 26, MODE_RECORDS: 29}
 
 
 wLabMode = sym("wLabMode")
@@ -894,13 +894,13 @@ def test_both_level_selects_load_their_own_tileset():
 
 def test_the_cursor_moves_and_wraps():
     """The list opens on its first row, which is MUSIC - Tolstoj's layout puts
-    the settings above the modes - and wraps at both ends onto OBSTACLE, which
-    is the last entry rather than the last mode number."""
+    the settings above the modes - and wraps at both ends onto RECORDS, the
+    last entry."""
     with Tetris(ROM) as t:
         to_menu(t)
         assert t[wLabMode] == MODE_MUSIC, "should open on the first row"
         t.press("up")
-        assert t[wLabMode] == MODE_OBSTACLE, "Up from the first row should wrap"
+        assert t[wLabMode] == MODE_RECORDS, "Up from the first row should wrap"
         t.press("down")
         assert t[wLabMode] == MODE_MUSIC, "Down from the last row should wrap"
 

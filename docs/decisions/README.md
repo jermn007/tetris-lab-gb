@@ -22,3 +22,4 @@ choice would otherwise have to be re-derived — or, worse, silently reversed.
 | [15](0015-high-scores-are-mirrored-to-cartridge-ram.md) | High scores are mirrored to cartridge RAM, a slot at a time |
 | [16](0016-game-statistics-are-counted-by-watching.md) | Game statistics are counted by watching, not by hooking |
 | [17](0017-the-stats-screen-sits-inside-the-game-over-state.md) | The stats screen sits inside the game over state |
+| [18](0018-records-live-on-the-cartridge-beside-their-scores.md) | Records live on the cartridge, in their score's place |
