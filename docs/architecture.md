@@ -49,6 +49,7 @@ tetris-lab-gb/
 │       ├── seed.asm           the six seed digits, and arming the LFSR
 │       ├── high_scores.asm    filing and drawing, seventh digit included
 │       ├── save.asm           the battery save: high scores, mirrored
+│       ├── settings.asm       level, hearts, music and name, remembered
 │       ├── stats.asm          one game's record, counted from the frame hook
 │       ├── stats_screen.asm   the page that record is shown on after a game
 │       ├── records.asm        records kept with their scores, and the RECORDS screen
@@ -245,7 +246,8 @@ Two caveats to handle explicitly:
 | --- | --- |
 | `$A000–$A004` | Magic + version. **A mismatched save is not read; a new one is started.** |
 | `$A005` | Records version (`docs/decisions/0018`) |
-| `$A006–$A03F` | Reserved: persistent Lab config (last level, heart flag, music, name) |
+| `$A006–$A00F` | Settings: level, hearts, music, last name, checksum (`docs/decisions/0019`) |
+| `$A010–$A03F` | Reserved |
 | `$A040–$A308` | A-type high scores, plain — 23 slots, each with its own checksum |
 | `$A340–$A608` | A-type high scores, hearts |
 | `$A640–$ACCF` | B-type high scores — 60 slots |

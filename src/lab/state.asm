@@ -245,6 +245,16 @@ wLabRecLevel::    db        ; the table being looked through
 wLabRecHearts::   db
 wLabRecEntry::    db        ; 0 the last game, 1-3 a place in the table
 wLabRecPos::      db        ; scratch: the place a score is being filed at
+
+; Remembered settings. See settings.asm. wLabSetLevel to wLabSetEnd is the
+; block as the cartridge holds it.
+wLabSetValid::    db        ; there are settings to put back at boot
+wLabSetLevel::    db
+wLabSetHearts::   db
+wLabSetMusic::    db
+wLabSetName::     ds 6      ; the last name typed; a zero first byte is none
+wLabSetEnd::
+wLabNamePtr::     dw        ; the name being typed, high byte first
 wLabStateUsedEnd::
 
 	ds 211 - (wLabStateUsedEnd - wLabStats)
