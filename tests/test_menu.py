@@ -365,6 +365,8 @@ def test_a_score_is_filed_under_the_level_it_was_played_at():
         # until the level select files it, which is the path under test.
         for i, v in enumerate(score):
             t.pb.memory[wScoreBCD + i] = v
+        t.press("start")                                   # the stats screen
+        t.tick(10)
         t.press("start")                                   # back to the select
         t.tick(40)
 

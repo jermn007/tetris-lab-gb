@@ -94,6 +94,7 @@ LabDispatch::
 ; Catch the combination here instead, which is what makes "top out, go again"
 ; work.
 .levelEnded:
+	call LabStatsFinish
 	call LabResetComboHeld
 	jr   nz, .runLevelEnded
 
@@ -101,7 +102,11 @@ LabDispatch::
 	ld   hl, Stub_148c
 	ret
 
+; A record to show first, if this game kept one.
 .runLevelEnded:
+	call LabStatsScreen
+	ld   hl, Stub_148c
+	ret  nz
 	ld   hl, GameState04_LevelEndedMain
 	ret
 
@@ -186,6 +191,7 @@ LabDispatch::
 	ld   [wLabScoreCarryDrawn], a
 	ld   [wLabScoreZeroMoved], a
 	call LabArmSeed
+	call LabStatsArm
 	call LabArmDrill
 	call LabCrunchArm
 	call LabObstacleArm
@@ -303,6 +309,7 @@ LabDispatch::
 	call LabObstacleApply
 	call LabSuppressPushdown
 	call LabDrawScoreCarry
+	call LabStatsTrack
 	ld   hl, GameState00_InGameMain
 	ret
 

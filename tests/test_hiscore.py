@@ -205,6 +205,9 @@ def test_the_mode_you_played_is_on_screen_while_you_type_your_name():
             t.pb.memory[0xFFE1] = 0x0D
             t.run_until(lambda: t.state == 0x04, what="the game over screen")
             t.press("start")
+            if row == MODE_TETRIS:              # which has a stats screen first
+                t.tick(10)
+                t.press("start")
             t.run_until(lambda: t.state == 0x15, what="the name entry")
             t.tick(30)
             out = ""
@@ -243,6 +246,8 @@ def test_the_level_you_played_is_on_screen_while_you_type_your_name():
             t.pb.memory[wScoreBCD + i] = b
         t.pb.memory[0xFFE1] = 0x0D              # game over
         t.run_until(lambda: t.state == 0x04, what="the game over screen")
+        t.press("start")                        # the stats screen
+        t.tick(10)
         t.press("start")
         t.run_until(lambda: t.state == 0x15, what="the name entry")
         t.tick(30)

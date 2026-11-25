@@ -196,7 +196,34 @@ wLabSaveDir::    db        ; SAVE_PUT / SAVE_GET / SAVE_SKIP
 wLabSaveCount::  db        ; slots left in the table being walked
 wLabSaveMil::    dw        ; that table's seventh digits, high byte first
 
-	ds 211
+; Game statistics. See stats.asm and docs/decisions/0016.
+;
+; wLabStats to wLabStatsRecordEnd is one game as it will be kept, laid out to
+; be copied whole. What follows it is only the counting.
+;
+; A checkpoint is the score - three BCD bytes low first, then its millions -
+; and the lines, as hNumLinesCompletedBCD keeps them.
+DEF STATS_CHECKPOINT_SIZEOF EQU 6
+
+wLabStats::
+wLabStatsFlags::      db        ; STATSB_*
+wLabStatsStartLevel:: db
+wLabStatsLevel::      db        ; the level it ended on
+wLabStatsFinal::      ds STATS_CHECKPOINT_SIZEOF
+wLabStatsL10::        ds STATS_CHECKPOINT_SIZEOF
+wLabStatsL20::        ds STATS_CHECKPOINT_SIZEOF
+wLabStatsClears::     ds 2 * 4  ; singles, doubles, triples, tetrises: words
+wLabStatsDrought::    dw        ; the longest run of pieces with no I
+wLabStatsPieces::     dw        ; pieces dealt
+wLabStatsRecordEnd::
+wLabStatsDroughtNow:: dw
+wLabStatsWasState::   db        ; hPieceFallingState as it was last frame
+wLabStatsAwaitSpawn:: db        ; a piece has locked and the next is not out
+wLabStatsLevelSeen::  db
+wLabStatsShown::      db        ; the stats screen has been opened
+wLabStatsEnd::
+
+	ds 211 - (wLabStatsEnd - wLabStats)
 wLabStateEnd::
 
 ; The TRANSITION row's top value, shown as F. TetrisGYM has one more, G, which
