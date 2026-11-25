@@ -96,6 +96,7 @@ Game Boy Color*** or the screen is greyscale — see [below](#known-quirk-greysc
 | --- | --- | --- |
 | Title screen | `Left` / `Right` | 1 PLAYER or 2 PLAYER |
 | Title screen | `Start` or `A` | confirm |
+| Title screen | `Up`+`B` | ask whether to erase all saves |
 | Lab menu | `Up` / `Down` | move between rows |
 | Lab menu | `Left` / `Right` | change the value on the row |
 | Lab menu | `Start` or `A` | launch the mode |
@@ -179,6 +180,9 @@ B-type and the trainers have no page.
 The cartridge **remembers how it was left**: the level, hearts and music of the last game
 started, and the last name typed. A new high score is offered that name, so `Start` alone signs
 it.
+
+To **erase everything saved**, hold `Up` and `B` on the title screen. It asks first, with the
+cursor on `NO`.
 
 **A trainer's game is not filed.** TRANSITION, CRUNCH and OBSTACLE start from a state nobody
 played their way to, so they ask for no name and leave the tables alone.

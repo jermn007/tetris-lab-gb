@@ -71,9 +71,12 @@ LabSaveBoot::
 	call LabSettingsLoad
 	jp   LabSettingsBoot
 
+; No save of ours: start one. Settings another layout left at $A006 are not
+; this one's either.
 .fresh:
 	call LabSaveAll
-	jp   LabRecordsClear
+	call LabRecordsClear
+	jp   LabSettingsForget
 
 
 ; Write every table and then the header. A few frames, so only ever from a
