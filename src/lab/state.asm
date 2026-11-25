@@ -255,6 +255,10 @@ wLabSetMusic::    db
 wLabSetName::     ds 6      ; the last name typed; a zero first byte is none
 wLabSetEnd::
 wLabNamePtr::     dw        ; the name being typed, high byte first
+
+; The erase question. See erase.asm.
+wLabEraseOpen::   db        ; it is up, on the title screen's own state
+wLabEraseYes::    db        ; the cursor is on YES
 wLabStateUsedEnd::
 
 	ds 211 - (wLabStateUsedEnd - wLabStats)

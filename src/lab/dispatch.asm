@@ -260,6 +260,8 @@ LabDispatch::
 	ld   a, IEF_VBLANK | IEF_SERIAL
 	ldh  [rIE], a
 
+	xor  a
+	ld   [wLabEraseOpen], a         ; WRAM, so a soft reset would leave it up
 	call LabTitleDraw
 
 ; Start the music the MUSIC row is set to. The screens this menu replaced each
