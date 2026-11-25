@@ -82,6 +82,21 @@ LabSettingsLoad::
 	ret
 
 
+; The block emptied. Zeros do not add up to the seed, so they are not read.
+LabSettingsForget::
+	ld   a, SAVE_RAM_ON
+	ld   [rRAMG], a
+	ld   hl, SAVE_SETTINGS
+	ld   b, SETTINGS_SIZEOF + 1
+	xor  a
+.byte:
+	ld   [hl+], a
+	dec  b
+	jr   nz, .byte
+	ld   [rRAMG], a                 ; SAVE_RAM_OFF
+	ret
+
+
 ; A game is starting, or a name is in: these are the settings now.
 LabSettingsKeep::
 	ldh  a, [hATypeLevel]

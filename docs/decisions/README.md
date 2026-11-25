@@ -24,3 +24,4 @@ choice would otherwise have to be re-derived — or, worse, silently reversed.
 | [17](0017-the-stats-screen-sits-inside-the-game-over-state.md) | The stats screen sits inside the game over state |
 | [18](0018-records-live-on-the-cartridge-beside-their-scores.md) | Records live on the cartridge, in their score's place |
 | [19](0019-settings-are-remembered-from-the-last-game-started.md) | Settings are remembered from the last game started |
+| [20](0020-erasing-the-save-is-a-question-on-the-title-screen.md) | Erasing the save is a question on the title screen |
