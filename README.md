@@ -176,6 +176,10 @@ doubles, triples and tetrises; **tetris rate**, the share of lines cleared four 
 **longest drought**, in pieces dealt without an I. A level the game never reached has no row.
 B-type and the trainers have no page.
 
+The cartridge **remembers how it was left**: the level, hearts and music of the last game
+started, and the last name typed. A new high score is offered that name, so `Start` alone signs
+it.
+
 **A trainer's game is not filed.** TRANSITION, CRUNCH and OBSTACLE start from a state nobody
 played their way to, so they ask for no name and leave the tables alone.
 

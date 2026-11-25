@@ -199,7 +199,9 @@ class Tetris:
         self.press("start")                       # TETRIS, or A-TYPE
         self.run_until_state(GS_A_TYPE_SELECTION_MAIN)
         self.tick(20)             # the picker defers its first paint a frame
-        if hearts and self.is_lab:
+        # Hearts are remembered across a power cycle, so they are set to what
+        # was asked for rather than toggled from an assumed "off".
+        if self.is_lab and bool(self[hIsHardMode]) != bool(hearts):
             self.press("select")
 
     def start_game_at(self, level, hearts=False):

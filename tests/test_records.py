@@ -315,7 +315,7 @@ def test_a_score_with_no_record_takes_none_down_with_it():
 def test_filing_writes_nothing_outside_the_record_it_draws_from():
     with Tetris(ROM) as t:
         play(t, 5, plays=(1,), seed=0x5A)
-        after = sym("wLabRecPos") + 1
+        after = sym("wLabStateUsedEnd")           # the first byte nothing owns
         for a in range(after, after + 64):
             t.pb.memory[a] = 0xEE
         play(t, 5, plays=(4,))

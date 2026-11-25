@@ -25,10 +25,9 @@ from `v0.3.0` or earlier deals a different sequence.
 
 Outstanding across finished milestones:
 
-* **SRAM persistence covers high scores only** (2026-11-24, `docs/decisions/0015`).
-  Every A-type and B-type table survives a power cycle, in an emulator. Settings
-  - last level, hearts, music, seed - still live in WRAM and do not: that is the
-  rest of M1 work item 4.
+* **SRAM persistence** (2026-11-24, `docs/decisions/0015`, `0019`). Every A-type
+  and B-type table survives a power cycle, and so do the last level, hearts,
+  music and name. The seed does not, by decision. Checked in an emulator only.
 * **Game statistics and saved records** (2026-11-24, `docs/decisions/0016`-`0018`).
   Every TETRIS game ends on a page of its record - level 10 and 20
   checkpoints, clears by size, tetris rate, longest drought - and every A-type

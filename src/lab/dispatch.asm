@@ -139,6 +139,7 @@ LabDispatch::
 	jr   nz, .nameEntrySaved
 	inc  a
 	ld   [wLabNameSaved], a
+	call LabNameOffer               ; the last name typed, to sign with Start
 	call LabSaveAll
 
 ; And once, what the level select's first frame would have drawn had the game
@@ -175,6 +176,7 @@ LabDispatch::
 
 	xor  a
 	ld   [wLabNameSaved], a
+	call LabNameKeep
 	call LabSaveAll
 
 .stillTyping:
@@ -190,6 +192,7 @@ LabDispatch::
 	ld   [wLabScoreCarryDrawn], a
 	ld   [wLabScoreZeroMoved], a
 	call LabArmSeed
+	call LabSettingsKeep            ; what this game was started with
 	call LabStatsArm
 	call LabArmDrill
 	call LabCrunchArm

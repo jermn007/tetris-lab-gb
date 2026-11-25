@@ -11,6 +11,7 @@
 ;   $A340  A-type, hearts  23 slots     the same
 ;   $A640  B-type          60 slots     entries, checksum
 ;   $A005  the records' own version
+;   $A006  settings: settings.asm
 ;   $AD00  records         138 slots    one per A-type entry: records.asm
 ;   $BF54  free                         172 bytes, kept for lifetime totals
 ;
@@ -58,7 +59,7 @@ LabSaveBoot::
 	ld   hl, wLabSaveLoaded
 	ld   a, [hl]
 	and  a
-	ret  nz
+	jp   nz, LabSettingsBoot        ; a soft reset: only HRAM was lost
 	inc  [hl]
 
 	call LabSaveHeaderIsOurs
@@ -66,7 +67,9 @@ LabSaveBoot::
 
 	ld   a, SAVE_GET
 	call LabSaveWalk
-	jp   LabRecordsCheck
+	call LabRecordsCheck
+	call LabSettingsLoad
+	jp   LabSettingsBoot
 
 .fresh:
 	call LabSaveAll
