@@ -129,10 +129,17 @@ LabTitlePaint::
 
 
 LabTitleMain::
+	ld   a, [wLabEraseOpen]
+	and  a
+	jp   nz, LabErase
+
 	call LabLinkPing
 	ldh  a, [hGameState]
 	cp   GS_TITLE_SCREEN_MAIN
 	ret  nz                         ; a partner took over; stop touching the screen
+
+	call LabEraseAsked
+	ret  nz
 
 	call LabTitleInput
 	jp   LabTitlePaint
