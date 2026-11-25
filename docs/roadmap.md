@@ -29,10 +29,12 @@ Outstanding across finished milestones:
   Every A-type and B-type table survives a power cycle, in an emulator. Settings
   - last level, hearts, music, seed - still live in WRAM and do not: that is the
   rest of M1 work item 4.
-* **Game statistics are shown but not kept** (2026-11-24, `docs/decisions/0016`,
-  `0017`). Every TETRIS game ends on a page of its record - level 10 and 20
-  checkpoints, clears by size, tetris rate, longest drought. Saving records and
-  a browser for them are next. Checked in an emulator only.
+* **Game statistics and saved records** (2026-11-24, `docs/decisions/0016`-`0018`).
+  Every TETRIS game ends on a page of its record - level 10 and 20
+  checkpoints, clears by size, tetris rate, longest drought - and every A-type
+  high score keeps its game's record on the cartridge, read back from the
+  menu's RECORDS row. Lifetime totals have 172 bytes kept for them and nothing
+  written. Checked in an emulator only.
 * Booting on a real DMG/GBC via a flash cart — needs hardware nobody has yet.
 
 Milestones are ordered by *risk retired per unit of effort*. Each has

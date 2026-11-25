@@ -223,7 +223,31 @@ wLabStatsLevelSeen::  db
 wLabStatsShown::      db        ; the stats screen has been opened
 wLabStatsEnd::
 
-	ds 211 - (wLabStatsEnd - wLabStats)
+; The record the stats page is showing: this game's, or one read back off the
+; cartridge. A copy, so looking through old games does not cost the last one.
+wLabView::
+wLabViewFlags::      db
+wLabViewStartLevel:: db
+wLabViewLevel::      db
+wLabViewFinal::      ds STATS_CHECKPOINT_SIZEOF
+wLabViewL10::        ds STATS_CHECKPOINT_SIZEOF
+wLabViewL20::        ds STATS_CHECKPOINT_SIZEOF
+wLabViewClears::     ds 2 * 4
+wLabViewDrought::    dw
+wLabViewPieces::     dw
+wLabViewEnd::
+
+	ASSERT wLabViewEnd - wLabView == wLabStatsRecordEnd - wLabStats
+
+; The RECORDS screen. See records.asm.
+wLabRecordsOpen:: db        ; it is up, on the menu's own state
+wLabRecLevel::    db        ; the table being looked through
+wLabRecHearts::   db
+wLabRecEntry::    db        ; 0 the last game, 1-3 a place in the table
+wLabRecPos::      db        ; scratch: the place a score is being filed at
+wLabStateUsedEnd::
+
+	ds 211 - (wLabStateUsedEnd - wLabStats)
 wLabStateEnd::
 
 ; The TRANSITION row's top value, shown as F. TetrisGYM has one more, G, which

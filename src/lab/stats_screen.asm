@@ -65,8 +65,40 @@ LabStatsScreen::
 
 
 LabStatsDraw:
+	call LabStatsViewLast
+	call LabStatsPageOpen
+	ld   hl, LabStatsTitle
+	call LabStatsLabel
+	call LabStatsBody
+; fall through
+
+LabStatsPageShow::
+	ldh  a, [rLCDC]
+	or   LCDCF_ON
+	ldh  [rLCDC], a
+	ret
+
+
+; The game just played, into the record the page draws.
+LabStatsViewLast::
+	ld   hl, wLabStats
+	ld   de, wLabView
+	ld   b, wLabStatsRecordEnd - wLabStats
+.copy:
+	ld   a, [hl+]
+	ld   [de], a
+	inc  de
+	dec  b
+	jr   nz, .copy
+	ret
+
+
+; A blank page, with the LCD off.
+LabStatsPageOpen::
 	call TurnOffLCD
 	call Clear_wOam
+	xor  a
+	ldh  [rSCY], a                  ; the menu scrolls; nothing else does
 
 	ld   hl, _SCRN0
 	ld   bc, _SCRN1 - _SCRN0
@@ -77,7 +109,11 @@ LabStatsDraw:
 	ld   a, b
 	or   c
 	jr   nz, .clear
+	ret
 
+
+; Everything under the title, from wLabView.
+LabStatsBody::
 	ld   hl, LabStatsLabels
 .labels:
 	call LabStatsLabel
@@ -86,18 +122,18 @@ LabStatsDraw:
 	jr   nz, .labels
 
 ; --- how it started and ended ---
-	ld   a, [wLabStatsStartLevel]
+	ld   a, [wLabViewStartLevel]
 	ld   de, _SCRN0 + 3 * 32 + 6
 	call LabStatsPutA
-	ld   a, [wLabStatsLevel]
+	ld   a, [wLabViewLevel]
 	ld   de, _SCRN0 + 3 * 32 + STATS_NUMBER_COL
 	call LabStatsPutA
 
-	ld   a, [wLabStatsFlags]
+	ld   a, [wLabViewFlags]
 	bit  STATSB_HEARTS, a
 	ld   hl, LabStatsHearts
 	call nz, LabStatsLabel
-	ld   a, [wLabStatsFlags]
+	ld   a, [wLabViewFlags]
 	bit  STATSB_SEEDED, a
 	ld   hl, LabStatsSeeded
 	call nz, LabStatsLabel
@@ -105,23 +141,23 @@ LabStatsDraw:
 ; --- the checkpoints, closed up: a level not reached leaves no gap ---
 	ld   de, _SCRN0 + 6 * 32 + 1
 	ld   hl, LabStatsRowNames
-	ld   bc, wLabStatsFinal
+	ld   bc, wLabViewFinal
 	call LabStatsRow
 
-	ld   a, [wLabStatsFlags]
+	ld   a, [wLabViewFlags]
 	bit  STATSB_L10, a
 	ld   hl, LabStatsRowNames + 3
-	ld   bc, wLabStatsL10
+	ld   bc, wLabViewL10
 	call nz, LabStatsRow
 
-	ld   a, [wLabStatsFlags]
+	ld   a, [wLabViewFlags]
 	bit  STATSB_L20, a
 	ld   hl, LabStatsRowNames + 6
-	ld   bc, wLabStatsL20
+	ld   bc, wLabViewL20
 	call nz, LabStatsRow
 
 ; --- singles, doubles, triples, tetrises ---
-	ld   hl, wLabStatsClears
+	ld   hl, wLabViewClears
 	ld   de, _SCRN0 + 10 * 32 + STATS_NUMBER_COL
 	ld   b, 4
 .clears:
@@ -150,21 +186,16 @@ LabStatsDraw:
 	ld   de, _SCRN0 + 15 * 32 + STATS_NUMBER_COL
 	call LabStatsPutHL
 
-	ld   hl, wLabStatsDrought
+	ld   hl, wLabViewDrought
 	ld   a, [hl+]
 	ld   h, [hl]
 	ld   l, a
 	ld   de, _SCRN0 + 16 * 32 + STATS_NUMBER_COL
-	call LabStatsPutHL
-
-	ldh  a, [rLCDC]
-	or   LCDCF_ON
-	ldh  [rLCDC], a
-	ret
+	jp   LabStatsPutHL
 
 
 ; hl = a cell, then its text, then $FF. Leaves hl after it.
-LabStatsLabel:
+LabStatsLabel::
 	ld   a, [hl+]
 	ld   e, a
 	ld   a, [hl+]
@@ -285,7 +316,7 @@ LabStatsRate:
 	xor  a
 	ld   [wLabDigits], a            ; the answer; LabStatsPutHL takes it over
 
-	ld   hl, wLabStatsClears + 6
+	ld   hl, wLabViewClears + 6
 	ld   a, [hl+]
 	ld   h, [hl]
 	ld   l, a
@@ -294,22 +325,22 @@ LabStatsRate:
 	ld   b, h
 	ld   c, l                       ; bc = lines in tetrises
 
-	ld   a, [wLabStatsClears + 4]
+	ld   a, [wLabViewClears + 4]
 	ld   e, a
-	ld   a, [wLabStatsClears + 5]
+	ld   a, [wLabViewClears + 5]
 	ld   d, a
 	add  hl, de
 	add  hl, de
 	add  hl, de
-	ld   a, [wLabStatsClears + 2]
+	ld   a, [wLabViewClears + 2]
 	ld   e, a
-	ld   a, [wLabStatsClears + 3]
+	ld   a, [wLabViewClears + 3]
 	ld   d, a
 	add  hl, de
 	add  hl, de
-	ld   a, [wLabStatsClears]
+	ld   a, [wLabViewClears]
 	ld   e, a
-	ld   a, [wLabStatsClears + 1]
+	ld   a, [wLabViewClears + 1]
 	ld   d, a
 	add  hl, de                     ; hl = lines
 
@@ -359,9 +390,11 @@ LabStatsRate:
 PUSHC
 SETCHARMAP labfont
 
-LabStatsLabels:
+LabStatsTitle:
 	dw _SCRN0 +  1 * 32 + 5
 	db "GAME STATS", $ff
+
+LabStatsLabels:
 	dw _SCRN0 +  3 * 32 + 1
 	db "START", $ff
 	dw _SCRN0 +  3 * 32 + 12

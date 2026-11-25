@@ -10,7 +10,9 @@
 ;   $A040  A-type, plain   23 slots     entries, seventh digits, checksum
 ;   $A340  A-type, hearts  23 slots     the same
 ;   $A640  B-type          60 slots     entries, checksum
-;   $AD00  free
+;   $A005  the records' own version
+;   $AD00  records         138 slots    one per A-type entry: records.asm
+;   $BF54  free                         172 bytes, kept for lifetime totals
 ;
 ; A slot is one level's three entries exactly as the original keeps them, so a
 ; slot is the unit a score changes - and the unit a power cut can damage. Each
@@ -60,10 +62,15 @@ LabSaveBoot::
 	inc  [hl]
 
 	call LabSaveHeaderIsOurs
-	jr   nz, LabSaveAll
+	jr   nz, .fresh
 
 	ld   a, SAVE_GET
-	jr   LabSaveWalk
+	call LabSaveWalk
+	jp   LabRecordsCheck
+
+.fresh:
+	call LabSaveAll
+	jp   LabRecordsClear
 
 
 ; Write every table and then the header. A few frames, so only ever from a

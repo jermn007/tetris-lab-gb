@@ -59,6 +59,10 @@ DEF MENU_BLINK_MASK  EQU $10        ; 16 frames lit, 16 dark
 ; but has nothing behind it yet a matter of leaving it out.
 DEF MENU_ROW_SIZEOF  EQU 2
 
+; RECORDS is not in his layout. It is written into the empty rows his box
+; leaves under TRAINING, a row clear of ELEVATED for the day that one works.
+DEF MENU_RECORDS_ROW EQU 29
+
 LabMenuEntries::
 	db  8, MODE_MUSIC
 	db 14, MODE_TETRIS
@@ -67,7 +71,8 @@ LabMenuEntries::
 	db 24, MODE_TRANSITION
 	db 25, MODE_CRUNCH
 	db 26, MODE_OBSTACLE
-DEF MENU_ENTRIES     EQU 7
+	db MENU_RECORDS_ROW, MODE_RECORDS
+DEF MENU_ENTRIES     EQU 8
 
 ; The rows his layout draws that nothing exists behind yet. Blanked at init
 ; rather than left on screen: a row you can see and cannot reach reads as
@@ -108,6 +113,10 @@ LabMenuSyncMode::
 ; original screen works.
 LabMenu::
 	call LabMenuInput
+
+	ld   a, [wLabRecordsOpen]       ; the row opened its own screen
+	and  a
+	ret  nz
 
 ; Nothing more once a row has launched. The screen has been blanked and its
 ; tileset handed back, and repainting would put this menu's values back onto it
@@ -254,6 +263,8 @@ LabMenuInput::
 	ld   a, [wLabMode]
 	cp   MODE_SEED
 	jr   z, .editSeed
+	cp   MODE_RECORDS
+	jp   z, LabRecordsOpen
 
 	cp   MODE_LAUNCHABLE
 	ret  nc
@@ -395,6 +406,13 @@ LabMenuDraw::
 
 	call LabMenuBlankUnbuilt
 	call LabMenuBlankBakedCursors
+
+	ld   a, MODE_RECORDS
+	call LabModeLabel
+	ld   h, d
+	ld   l, e
+	ld   de, _SCRN0 + MENU_RECORDS_ROW * 32 + MENU_TEXT_COL
+	call LabMenuPutString
 
 ; The LCD is off, so these go straight down.
 	ld   hl, LabTitleVersion
@@ -853,6 +871,7 @@ LabMenuLabels::
 	db "OBSTACLE", 0
 	db "SEED", 0
 	db "MUSIC", 0
+	db "RECORDS", 0
 POPC
 
 

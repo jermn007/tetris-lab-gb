@@ -39,5 +39,4 @@ tiles, which are under every tileset, so it loads none.
   no divide.
 * **The restart combination works from the page**, because it is still `$04`.
 * Every test that walked a TETRIS game past game over with one press needs two.
-* Not done here: saving records, and the RECORDS browser that will reuse this
-  page.
+* Saving records, and the RECORDS screen that reuses this page: ADR 0018.

@@ -95,6 +95,7 @@ LabFileHighScore::
 	sub  c                          ; the entry we displace, 0-2
 	push bc
 	ld   b, a
+	call LabRecordFile              ; the game's record takes the same place
 
 ; Shift the ones below it down, from the bottom up, alongside the scores and
 ; names the original is about to shift.
@@ -423,7 +424,8 @@ DEF MODE_OBSTACLE     EQU 4
 DEF MODE_LAUNCHABLE EQU 5           ; rows below this start a game
 DEF MODE_SEED       EQU 5
 DEF MODE_MUSIC      EQU 6
-DEF MODE_COUNT      EQU 7
+DEF MODE_RECORDS    EQU 7
+DEF MODE_COUNT      EQU 8
 
 DEF MENU_ROW0       EQU _SCRN0 + 6 * 32 + 3   ; first entry
 DEF MENU_STRIDE     EQU 1 * 32                ; one row per entry

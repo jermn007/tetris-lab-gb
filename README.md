@@ -105,6 +105,9 @@ Game Boy Color*** or the screen is greyscale — see [below](#known-quirk-greysc
 | Any time in a game | `A`+`B`+`Select`+`Start` | restart the same drill |
 | Paused | `B` | back to the level select |
 | Game over | `Start` or `A` | the game's stats, then again to carry on |
+| RECORDS | `Up` / `Down` | the last game, then places 1 to 3 |
+| RECORDS | `Left` / `Right`, `Select` | the level, and hearts |
+| RECORDS | `B` | back to the menu |
 
 ## Trainers
 
@@ -172,6 +175,10 @@ lines at the end, and at the moment the game reached **level 10** and **level 20
 doubles, triples and tetrises; **tetris rate**, the share of lines cleared four at a time; and the
 **longest drought**, in pieces dealt without an I. A level the game never reached has no row.
 B-type and the trainers have no page.
+
+Every A-type high score **keeps its game's record** on the cartridge. The menu's **RECORDS**
+row opens the same page for the last game played and for each of the three places at every
+level, hearts and plain. A score set on a seed keeps its place and no record.
 
 The rocket scene never plays. The original spends 2.4 seconds waiting and twenty-odd more on a
 launch, at exactly the scores a good session produces; topping out now returns you to the game over
